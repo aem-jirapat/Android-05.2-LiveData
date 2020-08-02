@@ -22,14 +22,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.navArgs
 import com.example.android.guesstheword.R
 import com.example.android.guesstheword.databinding.ScoreFragmentBinding
 
-/**
- * Fragment where the final score is shown, after the game is over
- */
+
 class ScoreFragment : Fragment() {
 
     private lateinit var viewModel: ScoreViewModel
@@ -53,7 +52,9 @@ class ScoreFragment : Fragment() {
         viewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(ScoreViewModel::class.java)
 
-        binding.scoreText.text = viewModel.score.toString()
+        viewModel.score.observe(viewLifecycleOwner, Observer { newScore ->
+            binding.scoreText.text = newScore.toString()
+        })
 
         return binding.root
     }
